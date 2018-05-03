@@ -25,8 +25,8 @@ HomieNode temperatureNode("temperature", "temperature");
 HomieNode humidityNode("humidity", "humidity");
 
 void temperatureSetup() {
-  Homie.setNodeProperty(temperatureNode, "unit", "c", true);
-  Homie.setNodeProperty(humidityNode, "unit", "percent", true);
+  temperatureNode.setProperty("unit").send("c");
+  humidityNode.setProperty("unit").send("percent");
 
   myHumidity.begin(); /* TODO maybe this needs to be called after homie setup */
 }
@@ -66,8 +66,8 @@ void temperatureLoop() {
       case 5:
         //DEBUGF("Temperature: %f C", temp);
         //DEBUGF("Humidity: %f", humd);
-        Homie.setNodeProperty(temperatureNode, "degrees", String(temp), true);
-        Homie.setNodeProperty(humidityNode, "percent", String(humd), true);
+        temperatureNode.setProperty("degrees").send(String(temp)));
+        humidityNode.setProperty("percent").send(String(humd)));
         wait_till = millis() + TEMPERATURE_INTERVAL;
         temperature_state = 6;
         break;
@@ -83,3 +83,4 @@ void temperatureLoop() {
 }
 
 #endif
+

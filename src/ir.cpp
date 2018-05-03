@@ -1,4 +1,4 @@
-#include "hardware.h";
+#include "hardware.h"
 #ifdef IR_TRANSMITTER
 
 #include <IRrecv.h>
@@ -8,7 +8,7 @@
 #include <IRutils.h>
 #include <Homie.h>
 #include "ir.h"
-#include "main.h";
+#include "main.h"
 
 IRsend irsend(PIN_IR);
 HomieNode irNode("ir","ir");
@@ -30,26 +30,26 @@ bool irTransmitHandler(String value) {
     DEBUG("Invalid IR command length");
     return true;
   }
-  
+
   if(value[0] == '5' && value[1] == ' ') {
     char addrstr[3];
     char commandstr[3];
     addrstr[2] = '\0';
     commandstr[2] = '\0';
- 
+
     memcpy(addrstr, &cstring[2],2);
     memcpy(commandstr, &cstring[5],2);
 
     uint8_t addr = strtoul(addrstr,0, 16);
     uint8_t comm = strtoul(commandstr,0, 16);
-    
+
     sprintf(buffer, "IR addr %x comm %x", addr, comm);
     DEBUG(buffer);
     uint16_t data = irsend.encodeRC5(addr, comm, true);
     sprintf(buffer, "Sending %x", data);
     DEBUG(buffer);
     irsend.sendRC5(data, RC5_BITS, 0);
-  } else if(value[0] == '6' && value[1] == ' ') { 
+  } else if(value[0] == '6' && value[1] == ' ') {
     char addrstr[3];
     char commandstr[3];
     addrstr[2] = '\0';
@@ -60,7 +60,7 @@ bool irTransmitHandler(String value) {
 
     uint8_t addr = strtoul(addrstr,0, 16);
     uint8_t comm = strtoul(commandstr,0, 16);
-    
+
     sprintf(buffer, "IR addr %x comm %x", addr, comm);
     DEBUG(buffer);
     uint64_t data = irsend.encodeRC6(addr, comm, true);
@@ -77,7 +77,7 @@ void irLoop() {
 
 void irSetup() {
   irNode.subscribe("transmit", irTransmitHandler);
-  
+
   DEBUG("IR setup");
   irsend.begin();
 }

@@ -1,4 +1,4 @@
-#include "hardware.h";
+#include "hardware.h"
 #ifdef PRESENCE_DETECTION
 
 #include <Homie.h>
@@ -30,14 +30,14 @@ void presenceLoop() {
       if(currentPresence != true) {
         currentPresence = true;
         DEBUG("Presence detected");
-        Homie.setNodeProperty(presenceNode, "value", "1", true);
+        presenceNode.setProperty("value").send("1"));
       }
       lastPositivePresence = now;
     } else {
       if(now > (lastPositivePresence + PRESENCE_TAKE_DOWN_TIME) && currentPresence == true) {
         currentPresence = false;
         DEBUG("No more presence");
-        Homie.setNodeProperty(presenceNode, "value", "0", true);
+        presenceNode.setProperty("value").send("0"));
       }
     }
     lastPresenceRead = now;
@@ -48,8 +48,7 @@ void presenceSetup() {
   DEBUG("Presence setup");
 
   pinMode(PIN_SENSOR, INPUT);
-  Homie.setNodeProperty(presenceNode, "unit", "bool", true);
+  presenceNode.setProperty("unit").send("bool");
 }
 
 #endif
-
